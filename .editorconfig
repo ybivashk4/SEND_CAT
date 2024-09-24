@@ -1,0 +1,9 @@
+
+[*]
+
+# Microsoft .NET properties
+csharp_indent_braces = false
+csharp_new_line_before_open_brace = none
+
+# ReSharper properties
+resharper_use_continuous_indent_inside_initializer_braces = false
