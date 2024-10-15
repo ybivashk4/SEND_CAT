@@ -14,33 +14,37 @@ namespace telegram_bot {
         private static CancellationTokenSource cts = new CancellationTokenSource();
         private bool is_first;
         private static async Task Main(string[] args) {
-
             var me = await bot.GetMeAsync();
             Console.WriteLine($"@{me.Username} is running... Press Enter to terminate");
-
             //await bot.SendTextMessageAsync(bot.GetUpdatesAsync().Id, "Жамкни!", replyMarkup: keyboard);
             // Начинаем получать обновления
             bot.StartReceiving(UpdateHandler, ErrorHandler, cancellationToken: cts.Token);
             Console.ReadLine(); // Ждем ввода пользователя
             cts.Cancel(); // Останавливаем бота
         }
-
         private static async Task UpdateHandler(ITelegramBotClient botClient, Update update,
             CancellationToken cancellationToken) {
-            switch (update.Type) {
-                case UpdateType.Message:
-                    var msg = update.Message;
-                    if (msg != null && update.Type == UpdateType.Message && update.Message?.Text != null) {
-                        Console.WriteLine($"Received message '{msg.Text}' from {msg.From}");
-                        await bot.SendTextMessageAsync(msg.Chat, "a", cancellationToken: cancellationToken, replyMarkup: get_buttons());
-                        // отслыает с сообщением, нужно, чтобы была только кнопка. 
-                    }
+            //Thread.Sleep(1000);
 
-                    break;
-                case UpdateType.CallbackQuery:
-                    await HandleButton(update.CallbackQuery!);
-                    break;
+            try {
+                switch (update.Type) {
+                    case UpdateType.Message:
+                        var msg = update.Message;
+                        if (msg != null && update.Type == UpdateType.Message && update.Message?.Text != null) {
+                            Console.WriteLine($"Received message '{msg.Text}' from {msg.From}");
+                            await bot.SendTextMessageAsync(msg.Chat, "CLICK BUTTON AND GET CAT!!!!!!!!!!!!!!!!!!!!!!!!!!", cancellationToken: cancellationToken, replyMarkup: get_buttons());
+                            // отслыает с сообщением, нужно, чтобы была только кнопка. 
+                        }
 
+                        break;
+                    case UpdateType.CallbackQuery:
+                        await HandleButton(update.CallbackQuery!);
+                        break;
+
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e);
             }
 
             //if (update.Type == UpdateType.Message && update.Message?.Text != null && update.Message?.Text.ToLower().Trim() == "cat") {
@@ -65,7 +69,6 @@ namespace telegram_bot {
             foreach (var path_segment in path_segments) {
                 url =url.AppendPathSegment(path_segment);
             }
-
             url = url.SetFragment(hash);
             url = url.SetQueryParams(new {
                 api_key = hash,
@@ -90,16 +93,20 @@ namespace telegram_bot {
             text = url;
 
             // Close the query to end the client-side loading animation
-            await bot.AnswerCallbackQueryAsync(query.Id);
+            try {
+                await bot.AnswerCallbackQueryAsync(query.Id);
+            }
+            catch (Telegram.Bot.Exceptions.ApiRequestException) {
+
+            }
+
             // Replace menu text and keyboard
             System.Console.WriteLine("url is : " + url);
             await bot.SendPhotoAsync(
                 query.Message!.Chat.Id,
                 photo: InputFile.FromString(text),
-                parseMode: ParseMode.Html,
                 replyMarkup: get_buttons()
             );
         }
     }
-
 }
