@@ -7,4 +7,7 @@
 #### реализаия тегов, реализация отправки картинки с надписью, отправка котов по цветам 
 
 ## Демонстрация работы
-![materials/demonstration.mkv]
+
+
+https://github.com/user-attachments/assets/0c29d77b-d0a8-479b-8232-4b0a10a6cb95
+
