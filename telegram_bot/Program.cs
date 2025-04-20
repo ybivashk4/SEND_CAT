@@ -11,7 +11,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace telegram_bot {
     internal class Program {
-        private static TelegramBotClient bot = new TelegramBotClient("7249903391:AAGgGlrYdHSmscEPaTqgR1g_m6v4yEPml5g");
+        private static TelegramBotClient bot = new TelegramBotClient("<BOT_TOKEN>");
         private static CancellationTokenSource cts = new CancellationTokenSource();
         private bool is_first;
         private static string? cat_says;
